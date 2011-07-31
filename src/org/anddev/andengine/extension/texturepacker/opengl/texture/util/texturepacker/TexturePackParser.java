@@ -42,16 +42,16 @@ public class TexturePackParser extends DefaultHandler {
 	private static final String TAG_TEXTURE_ATTRIBUTE_MINFILTER = "minfilter";
 	private static final String TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_NEAREST = "nearest";
 	private static final String TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_LINEAR = "linear";
-	private static final String TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_LINEARMIPMAPLINEAR = "linearmipmaplinear";
-	private static final String TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_LINEARMIPMAPNEAREST = "linearmipmapnearest";
-	private static final String TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_NEARESTMIPMAPLINEAR = "nearestmipmaplinear";
-	private static final String TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_NEARESTMIPMAPNEAREST = "nearestmipmapnearest";
+	private static final String TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_LINEAR_MIPMAP_LINEAR = "linear_mipmap_linear";
+	private static final String TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_LINEAR_MIPMAP_NEAREST = "linear_mipmap_nearest";
+	private static final String TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_NEAREST_MIPMAP_LINEAR = "nearest_mipmap_linear";
+	private static final String TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_NEAREST_MIPMAP_NEAREST = "nearest_mipmap_nearest";
 	private static final String TAG_TEXTURE_ATTRIBUTE_MAGFILTER = "magfilter";
 	private static final String TAG_TEXTURE_ATTRIBUTE_MAGFILTER_VALUE_NEAREST = "nearest";
 	private static final String TAG_TEXTURE_ATTRIBUTE_MAGFILTER_VALUE_LINEAR = "linear";
 	private static final String TAG_TEXTURE_ATTRIBUTE_WRAPT = "wrapt";
 	private static final String TAG_TEXTURE_ATTRIBUTE_WRAPS = "wraps";
-	private static final Object TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMPTOEDGE = "clamptoedge";
+	private static final Object TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMP_TO_EDGE = "clamp_to_edge";
 	private static final Object TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_REPEAT = "repeat";
 	private static final String TAG_TEXTURE_ATTRIBUTE_PREMULTIPLYALPHA = "premultiplyalpha";
 	private static final String TAG_TEXTURE_ATTRIBUTE_TYPE = "type";
@@ -212,13 +212,13 @@ public class TexturePackParser extends DefaultHandler {
 			return GL10.GL_NEAREST;
 		} else if(minFilter.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_LINEAR)) {
 			return GL10.GL_LINEAR;
-		} else if(minFilter.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_LINEARMIPMAPLINEAR)) {
+		} else if(minFilter.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_LINEAR_MIPMAP_LINEAR)) {
 			return GL10.GL_LINEAR_MIPMAP_LINEAR;
-		} else if(minFilter.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_LINEARMIPMAPNEAREST)) {
+		} else if(minFilter.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_LINEAR_MIPMAP_NEAREST)) {
 			return GL10.GL_LINEAR_MIPMAP_NEAREST;
-		} else if(minFilter.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_NEARESTMIPMAPLINEAR)) {
+		} else if(minFilter.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_NEAREST_MIPMAP_LINEAR)) {
 			return GL10.GL_NEAREST_MIPMAP_LINEAR;
-		} else if(minFilter.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_NEARESTMIPMAPNEAREST)) {
+		} else if(minFilter.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_NEAREST_MIPMAP_NEAREST)) {
 			return GL10.GL_NEAREST_MIPMAP_NEAREST;
 		} else {
 			throw new IllegalArgumentException("Unexpected " + TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MINFILTER + " attribute: '" + minFilter + "'.");
@@ -246,7 +246,7 @@ public class TexturePackParser extends DefaultHandler {
 
 	private static int parseWrap(final Attributes pAttributes, final String pWrapAttributeName) {
 		final String wrapAttribute = SAXUtils.getAttributeOrThrow(pAttributes, pWrapAttributeName);
-		if(wrapAttribute.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMPTOEDGE)) {
+		if(wrapAttribute.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMP_TO_EDGE)) {
 			return GL10.GL_CLAMP_TO_EDGE;
 		} else if(wrapAttribute.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_REPEAT)) {
 			return GL10.GL_REPEAT;
