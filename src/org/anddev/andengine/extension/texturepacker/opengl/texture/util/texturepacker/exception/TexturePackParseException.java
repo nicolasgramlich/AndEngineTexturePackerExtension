@@ -6,9 +6,9 @@ import org.xml.sax.SAXException;
  * (c) Zynga 2011
  *
  * @author Nicolas Gramlich <ngramlich@zynga.com>
- * @since 5:29:20 PM - Jul 29, 2011
+ * @since 17:29:20 - 29.07.2011
  */
-public class TexturePackerParseException extends SAXException {
+public class TexturePackParseException extends SAXException {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -23,19 +23,19 @@ public class TexturePackerParseException extends SAXException {
 	// Constructors
 	// ===========================================================
 
-	public TexturePackerParseException() {
+	public TexturePackParseException() {
 		super();
 	}
 
-	public TexturePackerParseException(final String pDetailMessage) {
+	public TexturePackParseException(final String pDetailMessage) {
 		super(pDetailMessage);
 	}
 
-	public TexturePackerParseException(final Exception pException) {
+	public TexturePackParseException(final Exception pException) {
 		super(pException);
 	}
 
-	public TexturePackerParseException(final String pMessage, final Exception pException) {
+	public TexturePackParseException(final String pMessage, final Exception pException) {
 		super(pMessage, pException);
 	}
 
