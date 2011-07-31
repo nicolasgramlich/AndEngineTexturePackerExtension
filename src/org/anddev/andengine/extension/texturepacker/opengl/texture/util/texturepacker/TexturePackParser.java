@@ -49,8 +49,8 @@ public class TexturePackParser extends DefaultHandler {
 	private static final String TAG_TEXTURE_ATTRIBUTE_MAGFILTER = "magfilter";
 	private static final String TAG_TEXTURE_ATTRIBUTE_MAGFILTER_VALUE_NEAREST = "nearest";
 	private static final String TAG_TEXTURE_ATTRIBUTE_MAGFILTER_VALUE_LINEAR = "linear";
-	private static final String TAG_TEXTURE_ATTRIBUTE_WRAPX = "wrapx";
-	private static final String TAG_TEXTURE_ATTRIBUTE_WRAPY = "wrapy";
+	private static final String TAG_TEXTURE_ATTRIBUTE_WRAPT = "wrapt";
+	private static final String TAG_TEXTURE_ATTRIBUTE_WRAPS = "wraps";
 	private static final Object TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMPTOEDGE = "clamptoedge";
 	private static final Object TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_REPEAT = "repeat";
 	private static final String TAG_TEXTURE_ATTRIBUTE_PREMULTIPLYALPHA = "premultiplyalpha";
@@ -199,8 +199,8 @@ public class TexturePackParser extends DefaultHandler {
 	private static TextureOptions parseTextureOptions(final Attributes pAttributes) {
 		final int minFilter = TexturePackParser.parseMinFilter(pAttributes);
 		final int magFilter = TexturePackParser.parseMagFilter(pAttributes);
-		final int wrapT = TexturePackParser.parseWrapX(pAttributes);
-		final int wrapS = TexturePackParser.parseWrapY(pAttributes);
+		final int wrapT = TexturePackParser.parseWrapT(pAttributes);
+		final int wrapS = TexturePackParser.parseWrapS(pAttributes);
 		final boolean preMultiplyAlpha = SAXUtils.getBooleanAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_PREMULTIPLYALPHA);
 
 		return new TextureOptions(minFilter, magFilter, wrapT, wrapS, GL10.GL_MODULATE, preMultiplyAlpha);
@@ -236,12 +236,12 @@ public class TexturePackParser extends DefaultHandler {
 		}
 	}
 
-	private static int parseWrapX(final Attributes pAttributes) {
-		return TexturePackParser.parseWrap(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAPX);
+	private static int parseWrapT(final Attributes pAttributes) {
+		return TexturePackParser.parseWrap(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAPT);
 	}
 
-	private static int parseWrapY(final Attributes pAttributes) {
-		return TexturePackParser.parseWrap(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAPY);
+	private static int parseWrapS(final Attributes pAttributes) {
+		return TexturePackParser.parseWrap(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAPS);
 	}
 
 	private static int parseWrap(final Attributes pAttributes, final String pWrapAttributeName) {
