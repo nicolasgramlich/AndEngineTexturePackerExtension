@@ -51,8 +51,8 @@ public class TexturePackParser extends DefaultHandler {
 	private static final String TAG_TEXTURE_ATTRIBUTE_MAGFILTER_VALUE_LINEAR = "linear";
 	private static final String TAG_TEXTURE_ATTRIBUTE_WRAPT = "wrapt";
 	private static final String TAG_TEXTURE_ATTRIBUTE_WRAPS = "wraps";
-	private static final Object TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMP_TO_EDGE = "clamp_to_edge";
-	private static final Object TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_REPEAT = "repeat";
+	private static final String TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMP_TO_EDGE = "clamp_to_edge";
+	private static final String TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_REPEAT = "repeat";
 	private static final String TAG_TEXTURE_ATTRIBUTE_PREMULTIPLYALPHA = "premultiplyalpha";
 	private static final String TAG_TEXTURE_ATTRIBUTE_TYPE = "type";
 	private static final String TAG_TEXTURE_ATTRIBUTE_TYPE_VALUE_PVRCCZ = "pvrccz";
@@ -201,7 +201,7 @@ public class TexturePackParser extends DefaultHandler {
 		final int magFilter = TexturePackParser.parseMagFilter(pAttributes);
 		final int wrapT = TexturePackParser.parseWrapT(pAttributes);
 		final int wrapS = TexturePackParser.parseWrapS(pAttributes);
-		final boolean preMultiplyAlpha = SAXUtils.getBooleanAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_PREMULTIPLYALPHA);
+		final boolean preMultiplyAlpha = parsePremultiplyalpha(pAttributes);
 
 		return new TextureOptions(minFilter, magFilter, wrapT, wrapS, GL10.GL_MODULATE, preMultiplyAlpha);
 	}
@@ -253,6 +253,10 @@ public class TexturePackParser extends DefaultHandler {
 		} else {
 			throw new IllegalArgumentException("Unexpected " + pWrapAttributeName + " attribute: '" + wrapAttribute + "'.");
 		}
+	}
+
+	private static boolean parsePremultiplyalpha(final Attributes pAttributes) {
+		return SAXUtils.getBooleanAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_PREMULTIPLYALPHA);
 	}
 
 	// ===========================================================
