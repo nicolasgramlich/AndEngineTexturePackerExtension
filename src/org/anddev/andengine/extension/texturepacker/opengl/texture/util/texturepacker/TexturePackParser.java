@@ -36,6 +36,7 @@ public class TexturePackParser extends DefaultHandler {
 	// ===========================================================
 
 	private static final String TAG_TEXTURE = "texture";
+	private static final String TAG_TEXTURE_ATTRIBUTE_VERSION = "version";
 	private static final String TAG_TEXTURE_ATTRIBUTE_FILE = "file";
 	private static final String TAG_TEXTURE_ATTRIBUTE_WIDTH = "width";
 	private static final String TAG_TEXTURE_ATTRIBUTE_HEIGHT = "height";
@@ -51,6 +52,7 @@ public class TexturePackParser extends DefaultHandler {
 	private static final String TAG_TEXTURE_ATTRIBUTE_MAGFILTER_VALUE_LINEAR = "linear";
 	private static final String TAG_TEXTURE_ATTRIBUTE_WRAPT = "wrapt";
 	private static final String TAG_TEXTURE_ATTRIBUTE_WRAPS = "wraps";
+	private static final String TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMP = "clamp";
 	private static final String TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMP_TO_EDGE = "clamp_to_edge";
 	private static final String TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_REPEAT = "repeat";
 	private static final String TAG_TEXTURE_ATTRIBUTE_PREMULTIPLYALPHA = "premultiplyalpha";
@@ -85,6 +87,7 @@ public class TexturePackParser extends DefaultHandler {
 	private final String mAssetBasePath;
 	private TextureRegionLibrary mTextureRegionLibrary;
 	private ITexture mTexture;
+	private int mVersion;
 
 	// ===========================================================
 	// Constructors
@@ -110,6 +113,7 @@ public class TexturePackParser extends DefaultHandler {
 	@Override
 	public void startElement(final String pUri, final String pLocalName, final String pQualifiedName, final Attributes pAttributes) throws SAXException {
 		if(pLocalName.equals(TexturePackParser.TAG_TEXTURE)) {
+			this.mVersion = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_TEXTURE_ATTRIBUTE_VERSION);
 			this.mTexture = this.parseTexture(pAttributes);
 			this.mTextureRegionLibrary = new TextureRegionLibrary(10);
 
@@ -139,9 +143,9 @@ public class TexturePackParser extends DefaultHandler {
 	private ITexture parseTexture(final Attributes pAttributes) throws TexturePackParseException {
 		final String file = SAXUtils.getAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_FILE);
 		final String type = SAXUtils.getAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_TYPE);
-		final PixelFormat pixelFormat = TexturePackParser.parsePixelFormat(pAttributes);
+		final PixelFormat pixelFormat = this.parsePixelFormat(pAttributes);
 
-		final TextureOptions textureOptions = TexturePackParser.parseTextureOptions(pAttributes);
+		final TextureOptions textureOptions = this.parseTextureOptions(pAttributes);
 
 		if(type.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_TYPE_VALUE_BITMAP)) {
 			try {
@@ -192,21 +196,21 @@ public class TexturePackParser extends DefaultHandler {
 		}
 	}
 
-	private static PixelFormat parsePixelFormat(final Attributes pAttributes) {
+	private PixelFormat parsePixelFormat(final Attributes pAttributes) {
 		return PixelFormat.valueOf(SAXUtils.getAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_PIXELFORMAT));
 	}
 
-	private static TextureOptions parseTextureOptions(final Attributes pAttributes) {
-		final int minFilter = TexturePackParser.parseMinFilter(pAttributes);
-		final int magFilter = TexturePackParser.parseMagFilter(pAttributes);
-		final int wrapT = TexturePackParser.parseWrapT(pAttributes);
-		final int wrapS = TexturePackParser.parseWrapS(pAttributes);
+	private TextureOptions parseTextureOptions(final Attributes pAttributes) {
+		final int minFilter = this.parseMinFilter(pAttributes);
+		final int magFilter = this.parseMagFilter(pAttributes);
+		final int wrapT = this.parseWrapT(pAttributes);
+		final int wrapS = this.parseWrapS(pAttributes);
 		final boolean preMultiplyAlpha = parsePremultiplyalpha(pAttributes);
 
-		return new TextureOptions(minFilter, magFilter, wrapT, wrapS, GL10.GL_MODULATE, preMultiplyAlpha);
+		return new TextureOptions(minFilter, magFilter, wrapT, wrapS, preMultiplyAlpha);
 	}
 
-	private static int parseMinFilter(final Attributes pAttributes) {
+	private int parseMinFilter(final Attributes pAttributes) {
 		final String minFilter = SAXUtils.getAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MINFILTER);
 		if(minFilter.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_NEAREST)) {
 			return GL10.GL_NEAREST;
@@ -225,7 +229,7 @@ public class TexturePackParser extends DefaultHandler {
 		}
 	}
 
-	private static int parseMagFilter(final Attributes pAttributes) {
+	private int parseMagFilter(final Attributes pAttributes) {
 		final String magFilter = SAXUtils.getAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MAGFILTER);
 		if(magFilter.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MAGFILTER_VALUE_NEAREST)) {
 			return GL10.GL_NEAREST;
@@ -236,17 +240,19 @@ public class TexturePackParser extends DefaultHandler {
 		}
 	}
 
-	private static int parseWrapT(final Attributes pAttributes) {
-		return TexturePackParser.parseWrap(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAPT);
+	private int parseWrapT(final Attributes pAttributes) {
+		return this.parseWrap(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAPT);
 	}
 
-	private static int parseWrapS(final Attributes pAttributes) {
-		return TexturePackParser.parseWrap(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAPS);
+	private int parseWrapS(final Attributes pAttributes) {
+		return this.parseWrap(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAPS);
 	}
 
-	private static int parseWrap(final Attributes pAttributes, final String pWrapAttributeName) {
+	private int parseWrap(final Attributes pAttributes, final String pWrapAttributeName) {
 		final String wrapAttribute = SAXUtils.getAttributeOrThrow(pAttributes, pWrapAttributeName);
-		if(wrapAttribute.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMP_TO_EDGE)) {
+		if(this.mVersion == 1 || wrapAttribute.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMP)) {
+			return GL10.GL_CLAMP_TO_EDGE;
+		} else if(wrapAttribute.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMP_TO_EDGE)) {
 			return GL10.GL_CLAMP_TO_EDGE;
 		} else if(wrapAttribute.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_REPEAT)) {
 			return GL10.GL_REPEAT;
@@ -255,7 +261,7 @@ public class TexturePackParser extends DefaultHandler {
 		}
 	}
 
-	private static boolean parsePremultiplyalpha(final Attributes pAttributes) {
+	private boolean parsePremultiplyalpha(final Attributes pAttributes) {
 		return SAXUtils.getBooleanAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_PREMULTIPLYALPHA);
 	}
 
