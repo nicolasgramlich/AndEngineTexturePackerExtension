@@ -113,7 +113,7 @@ public class TexturePackParser extends DefaultHandler {
 	@Override
 	public void startElement(final String pUri, final String pLocalName, final String pQualifiedName, final Attributes pAttributes) throws SAXException {
 		if(pLocalName.equals(TexturePackParser.TAG_TEXTURE)) {
-			this.mVersion = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_TEXTURE_ATTRIBUTE_VERSION);
+			this.mVersion = SAXUtils.getIntAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_VERSION);
 			this.mTexture = this.parseTexture(pAttributes);
 			this.mTextureRegionLibrary = new TextureRegionLibrary(10);
 
@@ -205,7 +205,7 @@ public class TexturePackParser extends DefaultHandler {
 		final int magFilter = this.parseMagFilter(pAttributes);
 		final int wrapT = this.parseWrapT(pAttributes);
 		final int wrapS = this.parseWrapS(pAttributes);
-		final boolean preMultiplyAlpha = parsePremultiplyalpha(pAttributes);
+		final boolean preMultiplyAlpha = this.parsePremultiplyalpha(pAttributes);
 
 		return new TextureOptions(minFilter, magFilter, wrapT, wrapS, preMultiplyAlpha);
 	}
