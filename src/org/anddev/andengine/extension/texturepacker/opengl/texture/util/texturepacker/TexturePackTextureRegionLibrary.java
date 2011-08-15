@@ -1,14 +1,14 @@
 package org.anddev.andengine.extension.texturepacker.opengl.texture.util.texturepacker;
 
-import org.anddev.andengine.opengl.texture.ITexture;
+import org.anddev.andengine.util.Library;
 
 /**
  * (c) Zynga 2011
  *
  * @author Nicolas Gramlich <ngramlich@zynga.com>
- * @since 23:23:47 - 30.07.2011
+ * @since 16:34:23 - 15.08.2011
  */
-public class TexturePack {
+public class TexturePackTextureRegionLibrary extends Library<TexturePackerTextureRegion> {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -17,29 +17,17 @@ public class TexturePack {
 	// Fields
 	// ===========================================================
 
-	private final ITexture mTexture;
-	private final TexturePackTextureRegionLibrary mTexturePackTextureRegionLibrary;
-
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public TexturePack(final ITexture pTexture, final TexturePackTextureRegionLibrary pTexturePackTextureRegionLibrary) {
-		this.mTexture = pTexture;
-		this.mTexturePackTextureRegionLibrary = pTexturePackTextureRegionLibrary;
+	public TexturePackTextureRegionLibrary(final int pInitialCapacity) {
+		super(pInitialCapacity);
 	}
 
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
-
-	public ITexture getTexture() {
-		return this.mTexture;
-	}
-
-	public TexturePackTextureRegionLibrary getTexturePackTextureRegionLibrary() {
-		return this.mTexturePackTextureRegionLibrary;
-	}
 
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces

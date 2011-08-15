@@ -15,8 +15,6 @@ import org.anddev.andengine.opengl.texture.compressed.pvr.PVRCCZTexture;
 import org.anddev.andengine.opengl.texture.compressed.pvr.PVRGZTexture;
 import org.anddev.andengine.opengl.texture.compressed.pvr.PVRTexture;
 import org.anddev.andengine.opengl.texture.compressed.pvr.PVRTexture.PVRTextureFormat;
-import org.anddev.andengine.opengl.texture.region.TextureRegionFactory;
-import org.anddev.andengine.opengl.texture.region.TextureRegionLibrary;
 import org.anddev.andengine.util.SAXUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -85,7 +83,7 @@ public class TexturePackParser extends DefaultHandler {
 
 	private TexturePack mTexturePackerResult;
 	private final String mAssetBasePath;
-	private TextureRegionLibrary mTextureRegionLibrary;
+	private TexturePackTextureRegionLibrary mTextureRegionLibrary;
 	private ITexture mTexture;
 	private int mVersion;
 
@@ -115,7 +113,7 @@ public class TexturePackParser extends DefaultHandler {
 		if(pLocalName.equals(TexturePackParser.TAG_TEXTURE)) {
 			this.mVersion = SAXUtils.getIntAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_VERSION);
 			this.mTexture = this.parseTexture(pAttributes);
-			this.mTextureRegionLibrary = new TextureRegionLibrary(10);
+			this.mTextureRegionLibrary = new TexturePackTextureRegionLibrary(10);
 
 			this.mTexturePackerResult = new TexturePack(this.mTexture, this.mTextureRegionLibrary);
 		} else if(pLocalName.equals(TexturePackParser.TAG_TEXTUREREGION)) {
@@ -124,13 +122,19 @@ public class TexturePackParser extends DefaultHandler {
 			final int y = SAXUtils.getIntAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTUREREGION_ATTRIBUTE_Y);
 			final int width = SAXUtils.getIntAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTUREREGION_ATTRIBUTE_WIDTH);
 			final int height = SAXUtils.getIntAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTUREREGION_ATTRIBUTE_HEIGHT);
+			
+			final String source = SAXUtils.getAttributeOrThrow(pAttributes, TAG_TEXTUREREGION_ATTRIBUTE_SOURCE);
 
 			// TODO Not sure how trimming could be transparently supported...
-			final boolean trimmed = SAXUtils.getBooleanAttribute(pAttributes, TexturePackParser.TAG_TEXTUREREGION_ATTRIBUTE_TRIMMED, false);
+			final boolean trimmed = SAXUtils.getBooleanAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTUREREGION_ATTRIBUTE_TRIMMED);
 			// TODO Rotation could be supported by a TetxureRegion subclass that swaps width<->height and also rotates' X1/Y1/X2/Y2...
-			final boolean rotated = SAXUtils.getBooleanAttribute(pAttributes, TexturePackParser.TAG_TEXTUREREGION_ATTRIBUTE_ROTATED, false);
+			final boolean rotated = SAXUtils.getBooleanAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTUREREGION_ATTRIBUTE_ROTATED);
+			final int sourceX = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_TEXTUREREGION_ATTRIBUTE_SOURCE_X);
+			final int sourceY = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_TEXTUREREGION_ATTRIBUTE_SOURCE_Y);
+			final int sourceWidth = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_TEXTUREREGION_ATTRIBUTE_SOURCE_WIDTH);
+			final int sourceHeight = SAXUtils.getIntAttributeOrThrow(pAttributes, TAG_TEXTUREREGION_ATTRIBUTE_SOURCE_HEIGHT);
 
-			this.mTextureRegionLibrary.put(id, TextureRegionFactory.extractFromTexture(this.mTexture, x, y, width, height, true));
+			this.mTextureRegionLibrary.put(id, new TexturePackerTextureRegion(this.mTexture, x, y, width, height, id, source, rotated, trimmed, sourceX, sourceY, sourceWidth, sourceHeight));
 		} else {
 			throw new TexturePackParseException("Unexpected end tag: '" + pLocalName + "'.");
 		}
