@@ -23,7 +23,6 @@ public class TexturePackerTextureRegion extends TextureRegion {
 	private final int mSourceY;
 	private final int mSourceWidth;
 	private final int mSourceHeight;
-	private final boolean mRotated;
 	private final boolean mTrimmed;
 	private final String mSource;
 	private final int mID;
@@ -33,10 +32,9 @@ public class TexturePackerTextureRegion extends TextureRegion {
 	// ===========================================================
 
 	public TexturePackerTextureRegion(final ITexture pTexture, final int pX, final int pY, final int pWidth, final int pHeight, final int pID, final String pSource, final boolean pRotated, final boolean pTrimmed, final int pSourceX, final int pSourceY, final int pSourceWidth, final int pSourceHeight) {
-		super(pTexture, pX, pY, pWidth, pHeight);
+		super(pTexture, pX, pY, pWidth, pHeight, pRotated);
 		this.mID = pID;
 		this.mSource = pSource;
-		this.mRotated = pRotated;
 		this.mTrimmed = pTrimmed;
 		this.mSourceX = pSourceX;
 		this.mSourceY = pSourceY;
@@ -54,10 +52,6 @@ public class TexturePackerTextureRegion extends TextureRegion {
 
 	public String getSource() {
 		return this.mSource;
-	}
-
-	public boolean isRotated() {
-		return this.mRotated;
 	}
 
 	public boolean isTrimmed() {
