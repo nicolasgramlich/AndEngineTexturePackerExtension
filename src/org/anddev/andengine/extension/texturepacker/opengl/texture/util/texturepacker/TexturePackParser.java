@@ -253,7 +253,7 @@ public class TexturePackParser extends DefaultHandler {
 
 	private int parseWrap(final Attributes pAttributes, final String pWrapAttributeName) {
 		final String wrapAttribute = SAXUtils.getAttributeOrThrow(pAttributes, pWrapAttributeName);
-		if(this.mVersion == 1 || wrapAttribute.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMP)) {
+		if(this.mVersion == 1 && wrapAttribute.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMP)) {
 			return GL10.GL_CLAMP_TO_EDGE;
 		} else if(wrapAttribute.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMP_TO_EDGE)) {
 			return GL10.GL_CLAMP_TO_EDGE;
