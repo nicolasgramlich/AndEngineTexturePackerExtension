@@ -9,6 +9,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.anddev.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
+import org.anddev.andengine.util.StreamUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -85,6 +86,8 @@ public class TexturePackLoader {
 			return null;
 		} catch (final IOException e) {
 			throw new TexturePackParseException(e);
+		} finally {
+			StreamUtils.close(pInputStream);
 		}
 	}
 
