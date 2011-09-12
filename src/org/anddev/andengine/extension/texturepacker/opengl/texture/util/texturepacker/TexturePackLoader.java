@@ -31,19 +31,17 @@ public class TexturePackLoader {
 	// Fields
 	// ===========================================================
 
-	private final Context mContext;
 	private final String mAssetBasePath;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public TexturePackLoader(final Context pContext) {
-		this(pContext, "");
+	public TexturePackLoader() {
+		this("");
 	}
 
-	public TexturePackLoader(final Context pContext, final String pAssetBasePath) {
-		this.mContext = pContext;
+	public TexturePackLoader(final String pAssetBasePath) {
 		this.mAssetBasePath = pAssetBasePath;
 	}
 
@@ -61,24 +59,24 @@ public class TexturePackLoader {
 
 	public TexturePack loadFromAsset(final Context pContext, final String pAssetPath) throws TexturePackParseException {
 		try {
-			return this.load(pContext.getAssets().open(this.mAssetBasePath + pAssetPath));
+			return this.load(pContext, pContext.getAssets().open(this.mAssetBasePath + pAssetPath));
 		} catch (final IOException e) {
 			throw new TexturePackParseException("Could not load " + this.getClass().getSimpleName() + " data from asset: " + pAssetPath, e);
 		}
 	}
 
-	public TexturePack load(final InputStream pInputStream) throws TexturePackParseException {
+	public TexturePack load(final Context pContext, final InputStream pInputStream) throws TexturePackParseException {
 		try{
 			final SAXParserFactory spf = SAXParserFactory.newInstance();
 			final SAXParser sp = spf.newSAXParser();
 
 			final XMLReader xr = sp.getXMLReader();
-			final TexturePackParser texturePackerParser = new TexturePackParser(this.mContext, this.mAssetBasePath);
+			final TexturePackParser texturePackerParser = new AssetTexturePackParser(pContext, this.mAssetBasePath);
 			xr.setContentHandler(texturePackerParser);
 
 			xr.parse(new InputSource(new BufferedInputStream(pInputStream)));
 
-			return texturePackerParser.getTexturePackerResult();
+			return texturePackerParser.getTexturePack();
 		} catch (final SAXException e) {
 			throw new TexturePackParseException(e);
 		} catch (final ParserConfigurationException pe) {

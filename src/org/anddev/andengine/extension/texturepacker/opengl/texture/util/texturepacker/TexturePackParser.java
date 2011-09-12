@@ -20,15 +20,13 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import android.content.Context;
-
 /**
  * (c) Zynga 2011
  *
  * @author Nicolas Gramlich <ngramlich@zynga.com>
  * @since 17:19:26 - 29.07.2011
  */
-public class TexturePackParser extends DefaultHandler {
+public abstract class TexturePackParser extends DefaultHandler {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -79,10 +77,7 @@ public class TexturePackParser extends DefaultHandler {
 	// Fields
 	// ===========================================================
 
-	private final Context mContext;
-
-	private TexturePack mTexturePackerResult;
-	private final String mAssetBasePath;
+	private TexturePack mTexturePack;
 	private TexturePackTextureRegionLibrary mTextureRegionLibrary;
 	private ITexture mTexture;
 	private int mVersion;
@@ -91,22 +86,19 @@ public class TexturePackParser extends DefaultHandler {
 	// Constructors
 	// ===========================================================
 
-	public TexturePackParser(final Context pContext, final String pAssetBasePath) {
-		this.mContext = pContext;
-		this.mAssetBasePath = pAssetBasePath;
-	}
-
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
 
-	public TexturePack getTexturePackerResult() {
-		return this.mTexturePackerResult;
+	public TexturePack getTexturePack() {
+		return this.mTexturePack;
 	}
 
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
+	
+	protected abstract InputStream onGetInputStream(final String pFilename) throws IOException;
 
 	@Override
 	public void startElement(final String pUri, final String pLocalName, final String pQualifiedName, final Attributes pAttributes) throws SAXException {
@@ -115,7 +107,7 @@ public class TexturePackParser extends DefaultHandler {
 			this.mTexture = this.parseTexture(pAttributes);
 			this.mTextureRegionLibrary = new TexturePackTextureRegionLibrary(10);
 
-			this.mTexturePackerResult = new TexturePack(this.mTexture, this.mTextureRegionLibrary);
+			this.mTexturePack = new TexturePack(this.mTexture, this.mTextureRegionLibrary);
 		} else if(pLocalName.equals(TexturePackParser.TAG_TEXTUREREGION)) {
 			final int id = SAXUtils.getIntAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTUREREGION_ATTRIBUTE_ID);
 			final int x = SAXUtils.getIntAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTUREREGION_ATTRIBUTE_X);
@@ -155,7 +147,7 @@ public class TexturePackParser extends DefaultHandler {
 				return new BitmapTexture(BitmapTextureFormat.fromPixelFormat(pixelFormat), textureOptions) {
 					@Override
 					protected InputStream onGetInputStream() throws IOException {
-						return TexturePackParser.this.mContext.getAssets().open(TexturePackParser.this.mAssetBasePath + file);
+						return TexturePackParser.this.onGetInputStream(file);
 					}
 				};
 			} catch (final IOException e) {
@@ -166,7 +158,7 @@ public class TexturePackParser extends DefaultHandler {
 				return new PVRTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), textureOptions) {
 					@Override
 					protected InputStream onGetInputStream() throws IOException {
-						return TexturePackParser.this.mContext.getAssets().open(TexturePackParser.this.mAssetBasePath + file);
+						return TexturePackParser.this.onGetInputStream(file);
 					}
 				};
 			} catch (final IOException e) {
@@ -177,7 +169,7 @@ public class TexturePackParser extends DefaultHandler {
 				return new PVRGZTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), textureOptions) {
 					@Override
 					protected InputStream onGetInputStream() throws IOException {
-						return TexturePackParser.this.mContext.getAssets().open(TexturePackParser.this.mAssetBasePath + file);
+						return TexturePackParser.this.onGetInputStream(file);
 					}
 				};
 			} catch (final IOException e) {
@@ -188,7 +180,7 @@ public class TexturePackParser extends DefaultHandler {
 				return new PVRCCZTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), textureOptions) {
 					@Override
 					protected InputStream onGetInputStream() throws IOException {
-						return TexturePackParser.this.mContext.getAssets().open(TexturePackParser.this.mAssetBasePath + file);
+						return TexturePackParser.this.onGetInputStream(file);
 					}
 				};
 			} catch (final IOException e) {
