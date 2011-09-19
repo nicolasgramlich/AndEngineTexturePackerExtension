@@ -36,5 +36,10 @@
 			<type>2</type>
 			<locationURI>_android_AndEngine_6e0d82d9/src</locationURI>
 		</link>
+		<link>
+			<name>AndroidCompatibilityLibrary_src</name>
+			<type>2</type>
+			<locationURI>_android_AndroidCompatibilityLibrary_4325be1a/src</locationURI>
+		</link>
 	</linkedResources>
 </projectDescription>
