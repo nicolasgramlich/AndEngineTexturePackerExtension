@@ -19,13 +19,13 @@ public class TexturePackerTextureRegion extends TextureRegion {
 	// Fields
 	// ===========================================================
 
+	private final int mID;
+	private final String mSource;
+	private final boolean mTrimmed;
 	private final int mSourceX;
 	private final int mSourceY;
 	private final int mSourceWidth;
 	private final int mSourceHeight;
-	private final boolean mTrimmed;
-	private final String mSource;
-	private final int mID;
 
 	// ===========================================================
 	// Constructors
