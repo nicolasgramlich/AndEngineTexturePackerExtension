@@ -35,6 +35,14 @@ public class TexturePackTextureRegionLibrary {
 	// Getter & Setter
 	// ===========================================================
 
+	public SparseArray<TexturePackerTextureRegion> getIDMapping() {
+		return this.mIDMapping;
+	}
+
+	public HashMap<String, TexturePackerTextureRegion> getSourceMapping() {
+		return this.mSourceMapping;
+	}
+
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================

@@ -15,7 +15,9 @@ import org.anddev.andengine.opengl.texture.compressed.pvr.PVRCCZTexture;
 import org.anddev.andengine.opengl.texture.compressed.pvr.PVRGZTexture;
 import org.anddev.andengine.opengl.texture.compressed.pvr.PVRTexture;
 import org.anddev.andengine.opengl.texture.compressed.pvr.PVRTexture.PVRTextureFormat;
+import org.anddev.andengine.opengl.texture.compressed.pvr.pixelbufferstrategy.SmartPVRTexturePixelBufferStrategy;
 import org.anddev.andengine.util.SAXUtils;
+import org.anddev.andengine.util.data.DataConstants;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -155,7 +157,7 @@ public abstract class TexturePackParser extends DefaultHandler {
 			}
 		} else if(type.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_TYPE_VALUE_PVR)) {
 			try {
-				return new PVRTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), textureOptions) {
+				return new PVRTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), new SmartPVRTexturePixelBufferStrategy(DataConstants.BYTES_PER_MEGABYTE / 8), textureOptions) {
 					@Override
 					protected InputStream onGetInputStream() throws IOException {
 						return TexturePackParser.this.onGetInputStream(file);
@@ -166,7 +168,7 @@ public abstract class TexturePackParser extends DefaultHandler {
 			}
 		} else if(type.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_TYPE_VALUE_PVRGZ)) {
 			try {
-				return new PVRGZTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), textureOptions) {
+				return new PVRGZTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), new SmartPVRTexturePixelBufferStrategy(DataConstants.BYTES_PER_MEGABYTE / 8), textureOptions) {
 					@Override
 					protected InputStream onGetInputStream() throws IOException {
 						return TexturePackParser.this.onGetInputStream(file);
@@ -177,7 +179,7 @@ public abstract class TexturePackParser extends DefaultHandler {
 			}
 		} else if(type.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_TYPE_VALUE_PVRCCZ)) {
 			try {
-				return new PVRCCZTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), textureOptions) {
+				return new PVRCCZTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), new SmartPVRTexturePixelBufferStrategy(DataConstants.BYTES_PER_MEGABYTE / 8), textureOptions) {
 					@Override
 					protected InputStream onGetInputStream() throws IOException {
 						return TexturePackParser.this.onGetInputStream(file);
