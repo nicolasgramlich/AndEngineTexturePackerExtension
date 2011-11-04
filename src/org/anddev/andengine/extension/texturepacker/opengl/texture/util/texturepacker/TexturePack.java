@@ -45,6 +45,14 @@ public class TexturePack {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 
+	public void loadTexture() {
+		this.mTexture.load();
+	}
+
+	public void unloadTexture() {
+		this.mTexture.unload();
+	}
+
 	// ===========================================================
 	// Methods
 	// ===========================================================
