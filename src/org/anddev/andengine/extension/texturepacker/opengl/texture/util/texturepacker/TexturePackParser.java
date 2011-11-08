@@ -7,7 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import org.anddev.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
 import org.anddev.andengine.opengl.texture.ITexture;
-import org.anddev.andengine.opengl.texture.Texture.PixelFormat;
+import org.anddev.andengine.opengl.texture.PixelFormat;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.bitmap.BitmapTexture;
 import org.anddev.andengine.opengl.texture.bitmap.BitmapTexture.BitmapTextureFormat;
@@ -36,8 +36,8 @@ public class TexturePackParser extends DefaultHandler {
 	private static final String TAG_TEXTURE = "texture";
 	private static final String TAG_TEXTURE_ATTRIBUTE_VERSION = "version";
 	private static final String TAG_TEXTURE_ATTRIBUTE_FILE = "file";
-	private static final String TAG_TEXTURE_ATTRIBUTE_WIDTH = "width";
-	private static final String TAG_TEXTURE_ATTRIBUTE_HEIGHT = "height";
+//	private static final String TAG_TEXTURE_ATTRIBUTE_WIDTH = "width";
+//	private static final String TAG_TEXTURE_ATTRIBUTE_HEIGHT = "height";
 	private static final String TAG_TEXTURE_ATTRIBUTE_MINFILTER = "minfilter";
 	private static final String TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_NEAREST = "nearest";
 	private static final String TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_LINEAR = "linear";
