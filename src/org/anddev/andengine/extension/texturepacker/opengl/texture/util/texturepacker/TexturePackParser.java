@@ -15,12 +15,12 @@ import org.anddev.andengine.opengl.texture.compressed.pvr.PVRCCZTexture;
 import org.anddev.andengine.opengl.texture.compressed.pvr.PVRGZTexture;
 import org.anddev.andengine.opengl.texture.compressed.pvr.PVRTexture;
 import org.anddev.andengine.opengl.texture.compressed.pvr.PVRTexture.PVRTextureFormat;
+import org.anddev.andengine.opengl.texture.compressed.pvr.pixelbufferstrategy.SmartPVRTexturePixelBufferStrategy;
 import org.anddev.andengine.util.SAXUtils;
+import org.anddev.andengine.util.data.DataConstants;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-
-import android.content.Context;
 
 /**
  * (c) Zynga 2011
@@ -28,7 +28,7 @@ import android.content.Context;
  * @author Nicolas Gramlich <ngramlich@zynga.com>
  * @since 17:19:26 - 29.07.2011
  */
-public class TexturePackParser extends DefaultHandler {
+public abstract class TexturePackParser extends DefaultHandler {
 	// ===========================================================
 	// Constants
 	// ===========================================================
@@ -79,10 +79,7 @@ public class TexturePackParser extends DefaultHandler {
 	// Fields
 	// ===========================================================
 
-	private final Context mContext;
-
-	private TexturePack mTexturePackerResult;
-	private final String mAssetBasePath;
+	private TexturePack mTexturePack;
 	private TexturePackTextureRegionLibrary mTextureRegionLibrary;
 	private ITexture mTexture;
 	private int mVersion;
@@ -91,22 +88,19 @@ public class TexturePackParser extends DefaultHandler {
 	// Constructors
 	// ===========================================================
 
-	public TexturePackParser(final Context pContext, final String pAssetBasePath) {
-		this.mContext = pContext;
-		this.mAssetBasePath = pAssetBasePath;
-	}
-
 	// ===========================================================
 	// Getter & Setter
 	// ===========================================================
 
-	public TexturePack getTexturePackerResult() {
-		return this.mTexturePackerResult;
+	public TexturePack getTexturePack() {
+		return this.mTexturePack;
 	}
 
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
+	
+	protected abstract InputStream onGetInputStream(final String pFilename) throws IOException;
 
 	@Override
 	public void startElement(final String pUri, final String pLocalName, final String pQualifiedName, final Attributes pAttributes) throws SAXException {
@@ -115,7 +109,7 @@ public class TexturePackParser extends DefaultHandler {
 			this.mTexture = this.parseTexture(pAttributes);
 			this.mTextureRegionLibrary = new TexturePackTextureRegionLibrary(10);
 
-			this.mTexturePackerResult = new TexturePack(this.mTexture, this.mTextureRegionLibrary);
+			this.mTexturePack = new TexturePack(this.mTexture, this.mTextureRegionLibrary);
 		} else if(pLocalName.equals(TexturePackParser.TAG_TEXTUREREGION)) {
 			final int id = SAXUtils.getIntAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTUREREGION_ATTRIBUTE_ID);
 			final int x = SAXUtils.getIntAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTUREREGION_ATTRIBUTE_X);
@@ -155,7 +149,7 @@ public class TexturePackParser extends DefaultHandler {
 				return new BitmapTexture(BitmapTextureFormat.fromPixelFormat(pixelFormat), textureOptions) {
 					@Override
 					protected InputStream onGetInputStream() throws IOException {
-						return TexturePackParser.this.mContext.getAssets().open(TexturePackParser.this.mAssetBasePath + file);
+						return TexturePackParser.this.onGetInputStream(file);
 					}
 				};
 			} catch (final IOException e) {
@@ -163,10 +157,10 @@ public class TexturePackParser extends DefaultHandler {
 			}
 		} else if(type.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_TYPE_VALUE_PVR)) {
 			try {
-				return new PVRTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), textureOptions) {
+				return new PVRTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), new SmartPVRTexturePixelBufferStrategy(DataConstants.BYTES_PER_MEGABYTE / 8), textureOptions) {
 					@Override
 					protected InputStream onGetInputStream() throws IOException {
-						return TexturePackParser.this.mContext.getAssets().open(TexturePackParser.this.mAssetBasePath + file);
+						return TexturePackParser.this.onGetInputStream(file);
 					}
 				};
 			} catch (final IOException e) {
@@ -174,10 +168,10 @@ public class TexturePackParser extends DefaultHandler {
 			}
 		} else if(type.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_TYPE_VALUE_PVRGZ)) {
 			try {
-				return new PVRGZTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), textureOptions) {
+				return new PVRGZTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), new SmartPVRTexturePixelBufferStrategy(DataConstants.BYTES_PER_MEGABYTE / 8), textureOptions) {
 					@Override
 					protected InputStream onGetInputStream() throws IOException {
-						return TexturePackParser.this.mContext.getAssets().open(TexturePackParser.this.mAssetBasePath + file);
+						return TexturePackParser.this.onGetInputStream(file);
 					}
 				};
 			} catch (final IOException e) {
@@ -185,10 +179,10 @@ public class TexturePackParser extends DefaultHandler {
 			}
 		} else if(type.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_TYPE_VALUE_PVRCCZ)) {
 			try {
-				return new PVRCCZTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), textureOptions) {
+				return new PVRCCZTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), new SmartPVRTexturePixelBufferStrategy(DataConstants.BYTES_PER_MEGABYTE / 8), textureOptions) {
 					@Override
 					protected InputStream onGetInputStream() throws IOException {
-						return TexturePackParser.this.mContext.getAssets().open(TexturePackParser.this.mAssetBasePath + file);
+						return TexturePackParser.this.onGetInputStream(file);
 					}
 				};
 			} catch (final IOException e) {
@@ -253,7 +247,7 @@ public class TexturePackParser extends DefaultHandler {
 
 	private int parseWrap(final Attributes pAttributes, final String pWrapAttributeName) {
 		final String wrapAttribute = SAXUtils.getAttributeOrThrow(pAttributes, pWrapAttributeName);
-		if(this.mVersion == 1 || wrapAttribute.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMP)) {
+		if(this.mVersion == 1 && wrapAttribute.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMP)) {
 			return GL10.GL_CLAMP_TO_EDGE;
 		} else if(wrapAttribute.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_WRAP_VALUE_CLAMP_TO_EDGE)) {
 			return GL10.GL_CLAMP_TO_EDGE;
