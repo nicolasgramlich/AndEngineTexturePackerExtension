@@ -140,7 +140,7 @@ public abstract class TexturePackParser extends DefaultHandler {
 	private ITexture parseTexture(final Attributes pAttributes) throws TexturePackParseException {
 		final String file = SAXUtils.getAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_FILE);
 		final String type = SAXUtils.getAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_TYPE);
-		final PixelFormat pixelFormat = this.parsePixelFormat(pAttributes);
+		final PixelFormat pixelFormat = TexturePackParser.parsePixelFormat(pAttributes);
 
 		final TextureOptions textureOptions = this.parseTextureOptions(pAttributes);
 
@@ -193,13 +193,13 @@ public abstract class TexturePackParser extends DefaultHandler {
 		}
 	}
 
-	private PixelFormat parsePixelFormat(final Attributes pAttributes) {
+	private static PixelFormat parsePixelFormat(final Attributes pAttributes) {
 		return PixelFormat.valueOf(SAXUtils.getAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_PIXELFORMAT));
 	}
 
 	private TextureOptions parseTextureOptions(final Attributes pAttributes) {
-		final int minFilter = this.parseMinFilter(pAttributes);
-		final int magFilter = this.parseMagFilter(pAttributes);
+		final int minFilter = TexturePackParser.parseMinFilter(pAttributes);
+		final int magFilter = TexturePackParser.parseMagFilter(pAttributes);
 		final int wrapT = this.parseWrapT(pAttributes);
 		final int wrapS = this.parseWrapS(pAttributes);
 		final boolean preMultiplyAlpha = this.parsePremultiplyalpha(pAttributes);
@@ -207,7 +207,7 @@ public abstract class TexturePackParser extends DefaultHandler {
 		return new TextureOptions(minFilter, magFilter, wrapT, wrapS, preMultiplyAlpha);
 	}
 
-	private int parseMinFilter(final Attributes pAttributes) {
+	private static int parseMinFilter(final Attributes pAttributes) {
 		final String minFilter = SAXUtils.getAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MINFILTER);
 		if(minFilter.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MINFILTER_VALUE_NEAREST)) {
 			return GL10.GL_NEAREST;
@@ -226,7 +226,7 @@ public abstract class TexturePackParser extends DefaultHandler {
 		}
 	}
 
-	private int parseMagFilter(final Attributes pAttributes) {
+	private static int parseMagFilter(final Attributes pAttributes) {
 		final String magFilter = SAXUtils.getAttributeOrThrow(pAttributes, TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MAGFILTER);
 		if(magFilter.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_MAGFILTER_VALUE_NEAREST)) {
 			return GL10.GL_NEAREST;
