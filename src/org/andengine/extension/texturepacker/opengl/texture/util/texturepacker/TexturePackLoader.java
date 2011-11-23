@@ -1,4 +1,4 @@
-package org.anddev.andengine.extension.texturepacker.opengl.texture.util.texturepacker;
+package org.andengine.extension.texturepacker.opengl.texture.util.texturepacker;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -8,8 +8,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.anddev.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
-import org.anddev.andengine.util.StreamUtils;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
+import org.andengine.util.StreamUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;

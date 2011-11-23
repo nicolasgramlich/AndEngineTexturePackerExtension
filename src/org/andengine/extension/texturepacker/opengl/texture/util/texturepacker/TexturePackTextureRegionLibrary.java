@@ -1,4 +1,4 @@
-package org.anddev.andengine.extension.texturepacker.opengl.texture.util.texturepacker;
+package org.andengine.extension.texturepacker.opengl.texture.util.texturepacker;
 
 import java.util.HashMap;
 

@@ -1,7 +1,7 @@
-package org.anddev.andengine.extension.texturepacker.opengl.texture.util.texturepacker;
+package org.andengine.extension.texturepacker.opengl.texture.util.texturepacker;
 
-import org.anddev.andengine.opengl.texture.ITexture;
-import org.anddev.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.texture.ITexture;
+import org.andengine.opengl.texture.region.TextureRegion;
 
 /**
  * 

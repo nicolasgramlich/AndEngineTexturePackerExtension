@@ -1,23 +1,23 @@
-package org.anddev.andengine.extension.texturepacker.opengl.texture.util.texturepacker;
+package org.andengine.extension.texturepacker.opengl.texture.util.texturepacker;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.microedition.khronos.opengles.GL10;
 
-import org.anddev.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
-import org.anddev.andengine.opengl.texture.ITexture;
-import org.anddev.andengine.opengl.texture.PixelFormat;
-import org.anddev.andengine.opengl.texture.TextureOptions;
-import org.anddev.andengine.opengl.texture.bitmap.BitmapTexture;
-import org.anddev.andengine.opengl.texture.bitmap.BitmapTexture.BitmapTextureFormat;
-import org.anddev.andengine.opengl.texture.compressed.pvr.PVRCCZTexture;
-import org.anddev.andengine.opengl.texture.compressed.pvr.PVRGZTexture;
-import org.anddev.andengine.opengl.texture.compressed.pvr.PVRTexture;
-import org.anddev.andengine.opengl.texture.compressed.pvr.PVRTexture.PVRTextureFormat;
-import org.anddev.andengine.opengl.texture.compressed.pvr.pixelbufferstrategy.SmartPVRTexturePixelBufferStrategy;
-import org.anddev.andengine.util.SAXUtils;
-import org.anddev.andengine.util.data.DataConstants;
+import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
+import org.andengine.opengl.texture.ITexture;
+import org.andengine.opengl.texture.PixelFormat;
+import org.andengine.opengl.texture.TextureOptions;
+import org.andengine.opengl.texture.bitmap.BitmapTexture;
+import org.andengine.opengl.texture.bitmap.BitmapTexture.BitmapTextureFormat;
+import org.andengine.opengl.texture.compressed.pvr.PVRCCZTexture;
+import org.andengine.opengl.texture.compressed.pvr.PVRGZTexture;
+import org.andengine.opengl.texture.compressed.pvr.PVRTexture;
+import org.andengine.opengl.texture.compressed.pvr.PVRTexture.PVRTextureFormat;
+import org.andengine.opengl.texture.compressed.pvr.pixelbufferstrategy.SmartPVRTexturePixelBufferStrategy;
+import org.andengine.util.SAXUtils;
+import org.andengine.util.data.DataConstants;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;

@@ -1,42 +1,35 @@
-package org.anddev.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception;
+package org.andengine.extension.texturepacker.opengl.texture.util.texturepacker;
 
-import org.xml.sax.SAXException;
+import java.io.IOException;
+import java.io.InputStream;
+
+import android.content.Context;
 
 /**
  * (c) Zynga 2011
  *
  * @author Nicolas Gramlich <ngramlich@zynga.com>
- * @since 17:29:20 - 29.07.2011
+ * @since 21:24:00 - 12.09.2011
  */
-public class TexturePackParseException extends SAXException {
+public class AssetTexturePackParser extends TexturePackParser {
 	// ===========================================================
 	// Constants
 	// ===========================================================
-
-	private static final long serialVersionUID = 5773816582330137037L;
 
 	// ===========================================================
 	// Fields
 	// ===========================================================
 
+	private final Context mContext;
+	private final String mAssetBasePath;
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public TexturePackParseException() {
-		super();
-	}
-
-	public TexturePackParseException(final String pDetailMessage) {
-		super(pDetailMessage);
-	}
-
-	public TexturePackParseException(final Exception pException) {
-		super(pException);
-	}
-
-	public TexturePackParseException(final String pMessage, final Exception pException) {
-		super(pMessage, pException);
+	public AssetTexturePackParser(final Context pContext, final String pAssetBasePath) {
+		this.mContext = pContext;
+		this.mAssetBasePath = pAssetBasePath;
 	}
 
 	// ===========================================================
@@ -46,6 +39,10 @@ public class TexturePackParseException extends SAXException {
 	// ===========================================================
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
+
+	protected InputStream onGetInputStream(final String pFilename) throws IOException {
+		return this.mContext.getAssets().open(this.mAssetBasePath + pFilename);
+	}
 
 	// ===========================================================
 	// Methods
