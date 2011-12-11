@@ -1,6 +1,7 @@
 package org.andengine.extension.texturepacker.opengl.texture.util.texturepacker;
 
 import org.andengine.opengl.texture.ITexture;
+import org.andengine.opengl.texture.TextureManager;
 
 /**
  * (c) Zynga 2011
@@ -45,12 +46,12 @@ public class TexturePack {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 
-	public void loadTexture() {
-		this.mTexture.load();
+	public void loadTexture(final TextureManager pTextureManager) {
+		this.mTexture.load(pTextureManager);
 	}
 
-	public void unloadTexture() {
-		this.mTexture.unload();
+	public void unloadTexture(final TextureManager pTextureManager) {
+		this.mTexture.unload(pTextureManager);
 	}
 
 	// ===========================================================
