@@ -8,6 +8,7 @@ import javax.microedition.khronos.opengles.GL10;
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
 import org.andengine.opengl.texture.ITexture;
 import org.andengine.opengl.texture.PixelFormat;
+import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.bitmap.BitmapTexture;
 import org.andengine.opengl.texture.bitmap.BitmapTexture.BitmapTextureFormat;
@@ -79,6 +80,8 @@ public abstract class TexturePackParser extends DefaultHandler {
 	// Fields
 	// ===========================================================
 
+	private final TextureManager mTextureManager;
+
 	private TexturePack mTexturePack;
 	private TexturePackTextureRegionLibrary mTextureRegionLibrary;
 	private ITexture mTexture;
@@ -87,6 +90,10 @@ public abstract class TexturePackParser extends DefaultHandler {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
+
+	public TexturePackParser(final TextureManager pTextureManager) {
+		mTextureManager = pTextureManager;
+	}
 
 	// ===========================================================
 	// Getter & Setter
@@ -146,7 +153,7 @@ public abstract class TexturePackParser extends DefaultHandler {
 
 		if(type.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_TYPE_VALUE_BITMAP)) {
 			try {
-				return new BitmapTexture(BitmapTextureFormat.fromPixelFormat(pixelFormat), textureOptions) {
+				return new BitmapTexture(this.mTextureManager, BitmapTextureFormat.fromPixelFormat(pixelFormat), textureOptions) {
 					@Override
 					protected InputStream onGetInputStream() throws IOException {
 						return TexturePackParser.this.onGetInputStream(file);
@@ -157,7 +164,7 @@ public abstract class TexturePackParser extends DefaultHandler {
 			}
 		} else if(type.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_TYPE_VALUE_PVR)) {
 			try {
-				return new PVRTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), new SmartPVRTexturePixelBufferStrategy(DataConstants.BYTES_PER_MEGABYTE / 8), textureOptions) {
+				return new PVRTexture(this.mTextureManager, PVRTextureFormat.fromPixelFormat(pixelFormat), new SmartPVRTexturePixelBufferStrategy(DataConstants.BYTES_PER_MEGABYTE / 8), textureOptions) {
 					@Override
 					protected InputStream onGetInputStream() throws IOException {
 						return TexturePackParser.this.onGetInputStream(file);
@@ -168,7 +175,7 @@ public abstract class TexturePackParser extends DefaultHandler {
 			}
 		} else if(type.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_TYPE_VALUE_PVRGZ)) {
 			try {
-				return new PVRGZTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), new SmartPVRTexturePixelBufferStrategy(DataConstants.BYTES_PER_MEGABYTE / 8), textureOptions) {
+				return new PVRGZTexture(this.mTextureManager, PVRTextureFormat.fromPixelFormat(pixelFormat), new SmartPVRTexturePixelBufferStrategy(DataConstants.BYTES_PER_MEGABYTE / 8), textureOptions) {
 					@Override
 					protected InputStream onGetInputStream() throws IOException {
 						return TexturePackParser.this.onGetInputStream(file);
@@ -179,7 +186,7 @@ public abstract class TexturePackParser extends DefaultHandler {
 			}
 		} else if(type.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_TYPE_VALUE_PVRCCZ)) {
 			try {
-				return new PVRCCZTexture(PVRTextureFormat.fromPixelFormat(pixelFormat), new SmartPVRTexturePixelBufferStrategy(DataConstants.BYTES_PER_MEGABYTE / 8), textureOptions) {
+				return new PVRCCZTexture(this.mTextureManager, PVRTextureFormat.fromPixelFormat(pixelFormat), new SmartPVRTexturePixelBufferStrategy(DataConstants.BYTES_PER_MEGABYTE / 8), textureOptions) {
 					@Override
 					protected InputStream onGetInputStream() throws IOException {
 						return TexturePackParser.this.onGetInputStream(file);

@@ -3,7 +3,9 @@ package org.andengine.extension.texturepacker.opengl.texture.util.texturepacker;
 import java.io.IOException;
 import java.io.InputStream;
 
-import android.content.Context;
+import org.andengine.opengl.texture.TextureManager;
+
+import android.content.res.AssetManager;
 
 /**
  * (c) Zynga 2011
@@ -20,15 +22,17 @@ public class AssetTexturePackParser extends TexturePackParser {
 	// Fields
 	// ===========================================================
 
-	private final Context mContext;
+	private final AssetManager mAssetManager;
 	private final String mAssetBasePath;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public AssetTexturePackParser(final Context pContext, final String pAssetBasePath) {
-		this.mContext = pContext;
+	public AssetTexturePackParser(final TextureManager pTextureManager, final AssetManager pAssetManager, final String pAssetBasePath) {
+		super(pTextureManager);
+
+		this.mAssetManager = pAssetManager;
 		this.mAssetBasePath = pAssetBasePath;
 	}
 
@@ -41,7 +45,7 @@ public class AssetTexturePackParser extends TexturePackParser {
 	// ===========================================================
 
 	protected InputStream onGetInputStream(final String pFilename) throws IOException {
-		return this.mContext.getAssets().open(this.mAssetBasePath + pFilename);
+		return this.mAssetManager.open(this.mAssetBasePath + pFilename);
 	}
 
 	// ===========================================================

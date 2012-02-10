@@ -9,12 +9,13 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.andengine.extension.texturepacker.opengl.texture.util.texturepacker.exception.TexturePackParseException;
+import org.andengine.opengl.texture.TextureManager;
 import org.andengine.util.StreamUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
-import android.content.Context;
+import android.content.res.AssetManager;
 
 /**
  * (c) Zynga 2011
@@ -31,17 +32,19 @@ public class TexturePackLoader {
 	// Fields
 	// ===========================================================
 
+	private final TextureManager mTextureManager;
 	private final String mAssetBasePath;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public TexturePackLoader() {
-		this("");
+	public TexturePackLoader(final TextureManager pTextureManager) {
+		this(pTextureManager, "");
 	}
 
-	public TexturePackLoader(final String pAssetBasePath) {
+	public TexturePackLoader(final TextureManager pTextureManager, final String pAssetBasePath) {
+		this.mTextureManager = pTextureManager;
 		this.mAssetBasePath = pAssetBasePath;
 	}
 
@@ -57,21 +60,21 @@ public class TexturePackLoader {
 	// Methods
 	// ===========================================================
 
-	public TexturePack loadFromAsset(final Context pContext, final String pAssetPath) throws TexturePackParseException {
+	public TexturePack loadFromAsset(final AssetManager pAssetManager, final String pAssetPath) throws TexturePackParseException {
 		try {
-			return this.load(pContext, pContext.getAssets().open(this.mAssetBasePath + pAssetPath));
+			return this.load(pAssetManager, pAssetManager.open(this.mAssetBasePath + pAssetPath));
 		} catch (final IOException e) {
 			throw new TexturePackParseException("Could not load " + this.getClass().getSimpleName() + " data from asset: " + pAssetPath, e);
 		}
 	}
 
-	public TexturePack load(final Context pContext, final InputStream pInputStream) throws TexturePackParseException {
+	public TexturePack load(final AssetManager pAssetManager, final InputStream pInputStream) throws TexturePackParseException {
 		try{
 			final SAXParserFactory spf = SAXParserFactory.newInstance();
 			final SAXParser sp = spf.newSAXParser();
 
 			final XMLReader xr = sp.getXMLReader();
-			final TexturePackParser texturePackerParser = new AssetTexturePackParser(pContext, this.mAssetBasePath);
+			final TexturePackParser texturePackerParser = new AssetTexturePackParser(this.mTextureManager, pAssetManager, this.mAssetBasePath);
 			xr.setContentHandler(texturePackerParser);
 
 			xr.parse(new InputSource(new BufferedInputStream(pInputStream)));
