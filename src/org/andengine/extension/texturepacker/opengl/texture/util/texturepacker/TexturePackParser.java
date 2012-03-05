@@ -19,6 +19,7 @@ import org.andengine.opengl.texture.compressed.pvr.PVRTexture.PVRTextureFormat;
 import org.andengine.opengl.texture.compressed.pvr.pixelbufferstrategy.SmartPVRTexturePixelBufferStrategy;
 import org.andengine.util.SAXUtils;
 import org.andengine.util.adt.DataConstants;
+import org.andengine.util.adt.io.in.IInputStreamOpener;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -153,12 +154,12 @@ public abstract class TexturePackParser extends DefaultHandler {
 
 		if(type.equals(TexturePackParser.TAG_TEXTURE_ATTRIBUTE_TYPE_VALUE_BITMAP)) {
 			try {
-				return new BitmapTexture(this.mTextureManager, BitmapTextureFormat.fromPixelFormat(pixelFormat), textureOptions) {
+				return new BitmapTexture(this.mTextureManager, new IInputStreamOpener() {
 					@Override
-					protected InputStream onGetInputStream() throws IOException {
+					public InputStream open() throws IOException {
 						return TexturePackParser.this.onGetInputStream(file);
 					}
-				};
+				}, BitmapTextureFormat.fromPixelFormat(pixelFormat), textureOptions);
 			} catch (final IOException e) {
 				throw new TexturePackParseException(e);
 			}
