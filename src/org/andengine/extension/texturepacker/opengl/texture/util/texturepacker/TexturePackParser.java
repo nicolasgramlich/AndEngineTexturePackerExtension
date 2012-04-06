@@ -11,7 +11,7 @@ import org.andengine.opengl.texture.PixelFormat;
 import org.andengine.opengl.texture.TextureManager;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.bitmap.BitmapTexture;
-import org.andengine.opengl.texture.bitmap.BitmapTexture.BitmapTextureFormat;
+import org.andengine.opengl.texture.bitmap.BitmapTextureFormat;
 import org.andengine.opengl.texture.compressed.pvr.PVRCCZTexture;
 import org.andengine.opengl.texture.compressed.pvr.PVRGZTexture;
 import org.andengine.opengl.texture.compressed.pvr.PVRTexture;
