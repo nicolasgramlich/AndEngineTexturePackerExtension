@@ -19,7 +19,7 @@ import org.andengine.opengl.texture.compressed.pvr.PVRTexture;
 import org.andengine.opengl.texture.compressed.pvr.PVRTexture.PVRTextureFormat;
 import org.andengine.opengl.texture.compressed.pvr.pixelbufferstrategy.SmartPVRTexturePixelBufferStrategy;
 import org.andengine.util.SAXUtils;
-import org.andengine.util.adt.DataConstants;
+import org.andengine.util.adt.data.constants.DataConstants;
 import org.andengine.util.adt.io.in.IInputStreamOpener;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
